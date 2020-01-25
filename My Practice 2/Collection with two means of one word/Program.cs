@@ -9,7 +9,7 @@ namespace Collection_with_two_means_of_one_word
 {
     class Program
     {
-        static Dictionary<int, string> russian_words = new Dictionary<int, string>();
+        private static Dictionary<int, string> russian_words = new Dictionary<int, string>();
 
         static Dictionary<int, string> ukrainian_1rst_mean = new Dictionary<int, string>();
 
@@ -17,11 +17,8 @@ namespace Collection_with_two_means_of_one_word
 
         static Dictionary<int, string> english_words = new Dictionary<int, string>();
 
-        static void Main()
-        {          
-
-            #region Standart Dictionary
-                  
+        private static void InitializeDictionary()
+        {
             russian_words.Add(0, "Апельсин");
             russian_words.Add(1, "Вертолет");
             russian_words.Add(2, "Потрачено");
@@ -45,12 +42,10 @@ namespace Collection_with_two_means_of_one_word
             english_words.Add(2, "Busted");
             english_words.Add(3, "Stupid");
             english_words.Add(4, "Picture");
-            #endregion Dictionary
+        }        
 
-            Console.WriteLine("Амбициозный проект укро-руско-английский словарь \"незнайка\".");
-            Console.WriteLine("Сам добавляй слова, в базе их очень мало.");
-
-            Reference:
+        private static void Help()
+        {
             Console.WriteLine();
             Console.WriteLine("Доступны следующие команды:");
             Console.WriteLine("\"D\" - для просмотра существующих слов в словаре;");
@@ -60,209 +55,234 @@ namespace Collection_with_two_means_of_one_word
             Console.WriteLine("\"Addition\" - для добавления второго значения для украинского слова. ");
             Console.WriteLine("\"Exit\" или \"Close\" - для выхода из программы.");
             Console.WriteLine("\"?\" - для повторного отображения возможных команд.. ");
+        }
 
-        #region Choice(switch-case)
-        Choice:
+        private static void Add()
+        {
+            Console.WriteLine("Вы в режиме добавления слов, для возвращения в меню напишите \"Menu\".");
+            Console.WriteLine();
+
+            string Rus_word = "";
+            string Ukr_word = "";
+            string Eng_word = "";
+
+            while (Rus_word != "Menu" & Ukr_word != "Menu" & Eng_word != "Menu")
+            {
+                int Key = english_words.Count;
+
+                Console.WriteLine("Создание новых слов под номером: {0}", Key.ToString());
+                Console.WriteLine();
+
+                Console.WriteLine("Напишите русское слово:");
+                Rus_word = Console.ReadLine();
+                if (Rus_word == "Menu") goto Choice;
+                russian_words.Add(Key, Rus_word);
+
+                Console.WriteLine("Напишите перевод на украинский язык:");
+                Ukr_word = Console.ReadLine();
+                if (Ukr_word == "Menu") goto Choice;
+                ukrainian_1rst_mean.Add(Key, Ukr_word);
+
+                Console.WriteLine("Напишите перевод на английский язык:");
+                Eng_word = Console.ReadLine();
+                if (Eng_word == "Menu") goto Choice;
+                english_words.Add(Key, Eng_word);
+
+                Console.WriteLine("Данные слова сохранились в словаре под № {0}", Key);
+            }
+        }
+
+        private static void Show()
+        {
+            Console.WriteLine("На данный моммент доступны следующие слова:");
+            Console.WriteLine("English - Russian - Ukrainian_1 - Ukrainian_2");
+
+            for (int i = 0; i < english_words.Count; i++)
+            {
+                Console.WriteLine("{0} - {1} - {2}, {3}", english_words[i], russian_words[i], ukrainian_1rst_mean[i], ukrainian_2nd_mean[i]);
+            }
+        }
+
+        private static void MainMenu()
+        {
             Console.WriteLine();
             Console.WriteLine("Сделайте ваш выбор, для справки введите: \"?\".");
-            string choice = Console.ReadLine();
+            string choice;
 
-            if (choice == "")
+            while ((choice = Console.ReadLine()) != "Exit" && choice != "Close")
             {
-                Console.WriteLine("Сделайте выбор прежде, чем нажать \"Enter\" !");
-                goto Choice;
-            }
+                if (choice == "")
+                {
+                    Console.WriteLine("Сделайте выбор прежде, чем нажать \"Enter\" !");
+                    continue;
+                }
+                else if (choice != "D" & choice != "U-R" & choice != "U-E" & choice != "Add" & choice != "Addition" & choice != "Exit" & choice != "Close" & choice != "?")
+                {
+                    Console.WriteLine("Ошибка: введенная команда не существует! ");
+                    continue;
+                }
 
-            else if (choice != "D" & choice != "U-R" & choice != "U-E" & choice != "Add" & choice != "Addition" & choice != "Exit" & choice != "Close" & choice != "?")
-            {
-                Console.WriteLine("Ошибка: введенная команда не существует! ");
-                goto Choice;
-            }
-            
-            switch (choice)
-            {
-                case "D":
-                    {
-                        Console.WriteLine("На данный моммент доступны следующие слова:");
-                        Console.WriteLine("English - Russian - Ukrainian_1 - Ukrainian_2");
-
-                        for (int i = 0; i < english_words.Count; i++)
+                switch (choice)
+                {
+                    case "D":
                         {
-                            Console.WriteLine("{0} - {1} - {2}, {3}", english_words[i], russian_words[i], ukrainian_1rst_mean[i], ukrainian_2nd_mean[i]);
+                            Show();
+                            continue;
                         }
-
-                        goto Choice;
-                    }
-                case "Add":
-                    {
-                        Console.WriteLine("Вы в режиме добавления слов, для возвращения в меню напишите \"Menu\"." );
-                        Console.WriteLine();
-
-                        string Rus_word = "";
-                        string Ukr_word = "";
-                        string Eng_word = "";
-
-                        while (Rus_word != "Menu" & Ukr_word != "Menu" & Eng_word != "Menu")
+                    case "Add":
                         {
-                            int Key = english_words.Count;                    
-
-                            Console.WriteLine("Создание новых слов под номером: {0}", Key.ToString());
-                            Console.WriteLine();
-
-                            Console.WriteLine("Напишите русское слово:");
-                            Rus_word = Console.ReadLine();
-                            if (Rus_word == "Menu") goto Choice; 
-                            russian_words.Add(Key,Rus_word);
-
-                            Console.WriteLine("Напишите перевод на украинский язык:");
-                            Ukr_word = Console.ReadLine();
-                            if (Ukr_word == "Menu") goto Choice;
-                            ukrainian_1rst_mean.Add(Key, Ukr_word);
-
-                            Console.WriteLine("Напишите перевод на английский язык:");
-                            Eng_word = Console.ReadLine();
-                            if (Eng_word == "Menu") goto Choice;
-                            english_words.Add(Key, Eng_word);
-
-                            Console.WriteLine("Данные слова сохранились в словаре под № {0}", Key);
+                            Add();
+                            continue;
                         }
-                        goto Choice;
-                    }
-                case "Addition":
-                    {
-                        Console.WriteLine("Укажите номер украинского слова, для которого будет записано второе значение:");
-                        string string_key = Console.ReadLine();
-                        int key = Convert.ToInt32(string_key);
-
-                        string ukr_value;
-                        ukrainian_1rst_mean.TryGetValue(key, out ukr_value);
-                                          
-                        if (ukrainian_1rst_mean.ContainsKey(key))
+                    case "Addition":
                         {
-                            goto Step;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Нет слова под данным номером!");
-                            goto Choice;
-                        }
+                            Console.WriteLine("Укажите номер украинского слова, для которого будет записано второе значение:");
+                            string string_key = Console.ReadLine();
+                            int key = Convert.ToInt32(string_key);
 
-                        Step:
-                        Console.WriteLine("Напишите перевод на украинский для слова \"{0}\":", ukr_value);
-                      
-                            string Ukr_word_2 = Console.ReadLine();
-                        ukrainian_2nd_mean.Add(key, Ukr_word_2);
-                        goto Choice;
-                    }
+                            string ukr_value;
+                            ukrainian_1rst_mean.TryGetValue(key, out ukr_value);
 
-                case "U-R":
-                    {
-                        Console.WriteLine("Для возвращения в меню напишите \"Menu\".");
-                        string Ukr_Dictionary_Value = "";
-
-                        while (Ukr_Dictionary_Value != "Menu")
-                          {
-                            Console.WriteLine("Напишите украинское слово которое хотите перевести на русский:");
-                            Ukr_Dictionary_Value = Console.ReadLine();
-
-                            if (ukrainian_1rst_mean.ContainsValue(Ukr_Dictionary_Value))
+                            if (ukrainian_1rst_mean.ContainsKey(key))
                             {
-                                int ukrainian_1rst_mean_key = ukrainian_1rst_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value).Key;
+                                continue;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Нет слова под данным номером!");
+                                continue;
+                            }
+                            Step(key, ukr_value);
+                            break;
+                        }
 
+                    case "U-R":
+                        {
+                            Console.WriteLine("Для возвращения в меню напишите \"Menu\".");
+                            string Ukr_Dictionary_Value = "";
 
-                                string rus_value;
-                                russian_words.TryGetValue(ukrainian_1rst_mean_key, out rus_value);
-                                Console.WriteLine(rus_value);
+                            while (Ukr_Dictionary_Value != "Menu")
+                            {
+                                Console.WriteLine("Напишите украинское слово которое хотите перевести на русский:");
                                 Ukr_Dictionary_Value = Console.ReadLine();
-                                continue;
-                            }
 
-                            else if (ukrainian_2nd_mean.ContainsValue(Ukr_Dictionary_Value))
-                            {
-                                int ukrainian_2nd_mean_key = ukrainian_2nd_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value).Key;
-
-                                string rus_value;
-                                russian_words.TryGetValue(ukrainian_2nd_mean_key, out rus_value);
-                                Console.WriteLine(rus_value);
-                                continue;
-                            }
-
-                            else 
-                              {
-                                if (Ukr_Dictionary_Value == "Menu")
+                                if (ukrainian_1rst_mean.ContainsValue(Ukr_Dictionary_Value))
                                 {
-                                    goto Choice;
+                                    int ukrainian_1rst_mean_key = ukrainian_1rst_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value).Key;
+
+
+                                    string rus_value;
+                                    russian_words.TryGetValue(ukrainian_1rst_mean_key, out rus_value);
+                                    Console.WriteLine(rus_value);
+                                    Ukr_Dictionary_Value = Console.ReadLine();
+                                    continue;
                                 }
-                                Console.WriteLine("{0} - нет в словаре.", Ukr_Dictionary_Value);
+
+                                else if (ukrainian_2nd_mean.ContainsValue(Ukr_Dictionary_Value))
+                                {
+                                    int ukrainian_2nd_mean_key = ukrainian_2nd_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value).Key;
+
+                                    string rus_value;
+                                    russian_words.TryGetValue(ukrainian_2nd_mean_key, out rus_value);
+                                    Console.WriteLine(rus_value);
+                                    continue;
+                                }
+
+                                else
+                                {
+                                    if (Ukr_Dictionary_Value == "Menu")
+                                    {
+                                        MainMenu();
+                                    }
+                                    Console.WriteLine("{0} - нет в словаре.", Ukr_Dictionary_Value);
+                                    continue;
+                                }
+                            }
+                            continue;
+                        }
+
+                    case "U-E":
+                        {
+                            Console.WriteLine("Напишите украинское слово которое хотите перевести на английский:");
+                            string Ukr_Dictionary_Value1 = Console.ReadLine();
+
+                            if (ukrainian_1rst_mean.ContainsValue(Ukr_Dictionary_Value1))
+                            {
+                                int ukrainian_1rst_mean_key = ukrainian_1rst_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value1).Key;
+
+                                if (english_words.ContainsKey(ukrainian_1rst_mean_key))
+                                {
+                                    string eng_value;
+                                    english_words.TryGetValue(ukrainian_1rst_mean_key, out eng_value);
+                                    Console.WriteLine(eng_value);
+                                    continue;
+                                }
+                                else Console.WriteLine();
+                                Console.WriteLine("Для данного слова нет перевода на английский.");
+                                MainMenu();
+                            }
+
+                            else if (ukrainian_2nd_mean.ContainsValue(Ukr_Dictionary_Value1))
+                            {
+                                int ukrainian_2nd_mean_key = ukrainian_2nd_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value1).Key;
+
+                                if (english_words.ContainsKey(ukrainian_2nd_mean_key))
+                                {
+                                    string eng_value;
+                                    english_words.TryGetValue(ukrainian_2nd_mean_key, out eng_value);
+                                    Console.WriteLine(eng_value);
+                                    continue;
+                                }
+                                else Console.WriteLine();
+                                Console.WriteLine("Для данного слова нет перевода на английский.");
                                 continue;
-                              }
-                          }
-                        goto Choice;
-                    }
-
-                case "U-E":
-                    {
-                        Console.WriteLine("Напишите украинское слово которое хотите перевести на английский:");
-                        string Ukr_Dictionary_Value1 = Console.ReadLine();
-
-                        if (ukrainian_1rst_mean.ContainsValue(Ukr_Dictionary_Value1))
-                        {
-                            int ukrainian_1rst_mean_key = ukrainian_1rst_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value1).Key;
-
-                            if (english_words.ContainsKey(ukrainian_1rst_mean_key))
-                            {
-                                string eng_value;
-                                english_words.TryGetValue(ukrainian_1rst_mean_key, out eng_value);
-                                Console.WriteLine(eng_value);
-                                goto Choice;
                             }
-                            else Console.WriteLine();
-                            Console.WriteLine("Для данного слова нет перевода на английский.");
-                            goto Choice;
-                        }
 
-                        else if (ukrainian_2nd_mean.ContainsValue(Ukr_Dictionary_Value1))
-                        {
-                            int ukrainian_2nd_mean_key = ukrainian_2nd_mean.FirstOrDefault(x => x.Value == Ukr_Dictionary_Value1).Key;
-                            
-                            if (english_words.ContainsKey(ukrainian_2nd_mean_key))
+                            else
                             {
-                                string eng_value;
-                                english_words.TryGetValue(ukrainian_2nd_mean_key, out eng_value);
-                                Console.WriteLine(eng_value);
-                                goto Choice;
+                                Console.WriteLine("{0} - нет в словаре.", Ukr_Dictionary_Value1);
+                                continue;
                             }
-                            else Console.WriteLine();
-                            Console.WriteLine("Для данного слова нет перевода на английский.");
-                            goto Choice;
+                            break;
                         }
 
-                        else
+                    case "Exit":
                         {
-                            Console.WriteLine("{0} - нет в словаре.", Ukr_Dictionary_Value1);
-                            goto Choice;
+                            Console.WriteLine("Выход из программы совершен, нажмите любую клавишу...");
+                            break;
                         }
-                    }
 
-                case "Exit":
-                    {
-                        Console.WriteLine("Выход из программы совершен, нажмите любую клавишу...");
-                        break;
-                    }
+                    case "Close":
+                        {
+                            Console.WriteLine("Выход из программы совершен, нажмите любую клавишу...");
+                            break;
+                        }
 
-                case "Close":
-                    {
-                        Console.WriteLine("Выход из программы совершен, нажмите любую клавишу...");
-                        break;
-                    }
-
-                case "?":
-                    {                       
-                        goto Reference;
-                    }
+                    case "?":
+                        {
+                            Help();
+                            MainMenu();
+                            break;
+                        }
+                }
             }
-            
-            #endregion Choice
+        }
+
+        private static void Step(int key, string ukr_value)
+        {
+            Console.WriteLine("Напишите перевод на украинский для слова \"{0}\":", ukr_value);
+
+            string Ukr_word_2 = Console.ReadLine();
+            ukrainian_2nd_mean.Add(key, Ukr_word_2);
+            MainMenu();
+        }
+
+        static void Main()
+        {
+            InitializeDictionary();
+            Console.WriteLine("Амбициозный проект укро-руско-английский словарь \"незнайка\".");
+            Console.WriteLine("Сам добавляй слова, в базе их очень мало.");
+            MainMenu();
         }
     }
 }
